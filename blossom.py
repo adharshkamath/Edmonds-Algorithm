@@ -108,7 +108,7 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
                     n_tree_index = forest.get_tree_by_node(neighbour)
                     if (
                         shortest_distance(
-                            forest.tree(v_tree_index),
+                            forest.tree_graph(v_tree_index),
                             neighbour,
                             forest.get_root(neighbour),
                         )
@@ -117,19 +117,19 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
                     ):
                         if n_tree_index != v_tree_index:
                             path_v = shortest_path(
-                                forest.tree(v_tree_index),
+                                forest.tree_graph(v_tree_index),
                                 forest.get_root(vertex),
                                 vertex,
                             )
                             path_n = shortest_path(
-                                forest.tree(n_tree_index),
+                                forest.tree_graph(n_tree_index),
                                 neighbour,
                                 forest.get_root(neighbour),
                             )
                             return path_v + path_n
                         else:
                             blossom = shortest_path(
-                                forest.tree(v_tree_index), vertex, neighbour
+                                forest.tree_graph(v_tree_index), vertex, neighbour
                             )
                             blossom.append(vertex)
                             contracted_graph = copy.deepcopy(graph)

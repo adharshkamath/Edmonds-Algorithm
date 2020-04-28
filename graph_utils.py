@@ -102,6 +102,9 @@ class Forest:
 
     def tree(self, tree_index):
         return self.tree_list[tree_index]
+    
+    def tree_graph(self, tree_index):
+        return self.tree_list[tree_index].graph
 
     def get_root(self, node):
         for tree in self.tree_list:
