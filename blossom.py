@@ -1,3 +1,6 @@
+"""
+This contains the definitions of the find_maximum_matching and find_aug_path functions.
+"""
 import copy
 from graph_utils import (
     Forest,
@@ -11,27 +14,67 @@ from graph_utils import (
 
 
 def find_maximum_matching(graph, matching):
+    """
+    Input:
+        graph: An instance of the Graph class defined in graph_utils.py
+        matching: A list of edges present in the matching
+    Description:
+        This is a recursive function that calls find_aug_path(), that returns an augmenting path.
+        The edges in the augmenting path are added to and removed from the matching alternatingly.
+        The recursion teminates once there are no more aug paths that can be found.
+    Output:
+        The function returns a list of edges that form the maximum matching in the given graph
+    Variables:
+        augmenting_path: A list of nodes that make up an augmenting path for the given graph and matching
+    """
     augmenting_path = find_aug_path(graph, matching)
     if augmenting_path == []:
         return matching
-    else:
-        for index in enumerate(augmenting_path):
-            if index % 2 == 0:
-                add_edge_to_matching(
-                    matching, augmenting_path[index], augmenting_path[index + 1]
-                )
-            if index % 2 == 1:
-                remove_edge_from_matching(
-                    matching, augmenting_path[index], augmenting_path[index + 1]
-                )
-        return find_maximum_matching(graph, matching)
+    for index in enumerate(augmenting_path):
+        if index % 2 == 0:
+            add_edge_to_matching(
+                matching, augmenting_path[index], augmenting_path[index + 1]
+            )
+        if index % 2 == 1:
+            remove_edge_from_matching(
+                matching, augmenting_path[index], augmenting_path[index + 1]
+            )
+    return find_maximum_matching(graph, matching)
 
 
 def find_aug_path(graph, matching, blossoms=[]):
+    """
+    Input:
+        graph: An instance of the Graph class defined in graph_utils.py
+        matching: A list of edges present in the matching
+        blossoms: A list of blossoms from previous calls to find_aug_path
+    Description:
+        This function finds augmenting paths, given a graph and a matching in the graph.
+        The function is called recursively if there are any odd length cycles present in
+        the augmenting path
+    Output:
+        The function returns a list of nodes that make an augmenting path, if there exists one, 
+        given the graph and the corresponding matching. 
+        Returns [] if there exists none        
+    Variables:
+        forest: An instance of the Forest class defined in graph_utils.py. 
+                This is used to store the BFS trees that are formed when the unmatched vertices are explored
+        forest_nodes: A list of nodes that are unmatched in the given graph
+        flag: A temporary flag variable to check unmatched vertices
+        unmarked_edges: A list of edges that are not in the matching
+        blossom: A list of nodes that make an odd length cycle in the augmenting path
+        contracted_graph: The graph resulting from contracting the nodes in the blossom
+        contracted_matching: The matching resulting from contracting the nodes in the blossom,
+                            which removes the matching among the edges in the blossom
+        aug_path: A list of nodes that make up an augmenting path, involving a blossom. 
+                This stores the return value of the recursive call
+        lifted_blossom: A list of nodes representing the blossom after selecing the proper interior path to add to the matching
+        based_blossom: A list of nodes representing the blossom whose base is in the beginning
+        left_stem: A list of nodes representing the part of augmenting path that is present before the blossom in cases where a blossom is detected
+        right_stem: A list of nodes representing the part of augmenting path that is present after the blossom in cases where a blossom is detected       
+    """
     forest = Forest()
     forest_nodes = []
-    exposed_vertices = []
-    path = []
     flag = False
     for i in enumerate(graph.nodes):
         flag = False
@@ -39,12 +82,8 @@ def find_aug_path(graph, matching, blossoms=[]):
             if i in (edge[0], edge[1]):
                 flag = True
         if not flag:
-            exposed_vertices.append(i)
-    node_to_root = [None for i in exposed_vertices]
-    for vertex in exposed_vertices:
-        forest.add_tree(Tree(vertex))
-        forest_nodes.append(vertex)
-        node_to_root[vertex] = vertex
+            forest.add_tree(Tree(i))
+            forest_nodes.append(i)
     unmarked_edges = []
     for vertex in graph.nodes:
         for edge in graph.get_edges(vertex):
@@ -58,7 +97,7 @@ def find_aug_path(graph, matching, blossoms=[]):
             if edge in unmarked_edges or reverse_edge in unmarked_edges:
                 neighbour = edge[1]
                 neighbour_in_forest = forest.is_in_forest(neighbour)
-                if neighbour_in_forest == False:
+                if not neighbour_in_forest:
                     forest.tree(v_tree_index).add_edge(edge)
                     neighbour_matching = matching.get_edges(neighbour)
                     forest.tree(v_tree_index).add_edge(neighbour_matching)
@@ -233,4 +272,4 @@ def find_aug_path(graph, matching, blossoms=[]):
                                             )
                             else:
                                 return aug_path
-    return path
+    return []
