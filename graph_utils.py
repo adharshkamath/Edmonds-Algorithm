@@ -30,12 +30,16 @@ def bfs_util(graph, source, destination):
 def shortest_path(graph, source, destination):
     parent, distance = bfs_util(graph, source, destination)
     path = []
+    index_list = list(graph.keys())
     current = destination
+    current_idx = index_list.index(current)
     while current != source:
         path.append(current)
-        current = parent[current]
+        current_idx = index_list.index(current)
+        current = parent[current_idx]
     path.append(source)
-    return path.reverse()
+    path.reverse()
+    return path
 
 
 def shortest_distance(graph, source, destination):
