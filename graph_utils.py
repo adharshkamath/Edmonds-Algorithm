@@ -1,17 +1,18 @@
 import copy
 import sys
+from collections import deque
 
 
 def bfs_util(graph, source, destination):
-    bfs_queue = []
-    visited = [False for i in enumerate(graph)]
-    parent = [None for i in enumerate(graph)]
-    distance = [sys.maxsize for i in enumerate(graph)]
+    bfs_queue = deque()
+    visited = [False for _ in graph]
+    parent = [None for _ in graph]
+    distance = [sys.maxsize for _ in graph]
     visited[source] = True
     distance[source] = 0
     bfs_queue.append(source)
     while bfs_queue != []:
-        current = bfs_queue.pop(0)
+        current = bfs_queue.popleft()
         for neighbour in graph[current]:
             if not visited[neighbour]:
                 visited[neighbour] = True
@@ -89,7 +90,7 @@ class Forest:
         self.tree_list.append(tree)
 
     def get_tree_by_node(self, node):
-        for index in enumerate(self.tree_list):
+        for index, _ in enumerate(self.tree_list):
             if node in self.tree_list[index].nodes:
                 return index
 

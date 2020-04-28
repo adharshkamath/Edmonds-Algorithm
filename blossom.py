@@ -3,6 +3,7 @@ This contains the definitions of the find_maximum_matching and find_aug_path fun
 """
 import copy
 from graph_utils import (
+    Graph,
     Forest,
     Tree,
     add_edge_to_matching,
@@ -13,7 +14,7 @@ from graph_utils import (
 )
 
 
-def find_maximum_matching(graph, matching):
+def find_maximum_matching(graph: Graph, matching: List[int]) -> List[int]:
     """
     Input:
         graph: An instance of the Graph class defined in graph_utils.py
@@ -42,7 +43,7 @@ def find_maximum_matching(graph, matching):
     return find_maximum_matching(graph, matching)
 
 
-def find_aug_path(graph, matching, blossoms=[]):
+def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] = []):
     """
     Input:
         graph: An instance of the Graph class defined in graph_utils.py
@@ -76,10 +77,10 @@ def find_aug_path(graph, matching, blossoms=[]):
     forest = Forest()
     forest_nodes = []
     flag = False
-    for i in enumerate(graph.nodes):
+    for i in graph.nodes:
         flag = False
         for edge in matching:
-            if i in (edge[0], edge[1]):
+            if i in edge:
                 flag = True
         if not flag:
             forest.add_tree(Tree(i))
@@ -138,7 +139,8 @@ def find_aug_path(graph, matching, blossoms=[]):
                                         contracted_graph, blossom[index], neighbour
                                     )
                                     if blossom[index] in contracted_matching.nodes:
-                                        remove_edge = matching.get_edges(blossom[index])
+                                        remove_edge = matching.get_edges(
+                                            blossom[index])
                                         remove_edge_from_matching(
                                             contracted_matching,
                                             remove_edge[0],
@@ -150,9 +152,10 @@ def find_aug_path(graph, matching, blossoms=[]):
                             )
                             blossom_vertex = blossoms.pop()
                             if blossom_vertex in aug_path:
-                                left_stem = aug_path[0 : aug_path.index(blossom_vertex)]
+                                left_stem = aug_path[0: aug_path.index(
+                                    blossom_vertex)]
                                 right_stem = aug_path[
-                                    aug_path.index(blossom_vertex) + 1 :
+                                    aug_path.index(blossom_vertex) + 1:
                                 ]
                                 lifted_blossom = []
                                 count = 0
@@ -196,11 +199,13 @@ def find_aug_path(graph, matching, blossoms=[]):
                                                 ):
                                                     if count % 2 == 0:
                                                         lifted_blossom = list(
-                                                            reversed(based_blossom)
-                                                        )[-count - 1 :]
+                                                            reversed(
+                                                                based_blossom)
+                                                        )[-count - 1:]
                                                     else:
                                                         lifted_blossom = list(
-                                                            reversed(based_blossom)
+                                                            reversed(
+                                                                based_blossom)
                                                         )[count:]
                                                 count += 1
                                         return left_stem + lifted_blossom
@@ -219,7 +224,8 @@ def find_aug_path(graph, matching, blossoms=[]):
                                                         ]
                                                     else:
                                                         lifted_blossom = list(
-                                                            reversed(based_blossom)
+                                                            reversed(
+                                                                based_blossom)
                                                         )[:-count]
                                                 count += 1
                                             return lifted_blossom + right_stem
@@ -227,7 +233,8 @@ def find_aug_path(graph, matching, blossoms=[]):
                                     if matching.has_edge(blossom_base, left_stem[-1]):
                                         if graph.has_edge(blossom_base, right_stem[0]):
                                             return (
-                                                left_stem + [blossom_base] + right_stem
+                                                left_stem +
+                                                [blossom_base] + right_stem
                                             )
                                         else:
                                             count = 0
@@ -241,7 +248,8 @@ def find_aug_path(graph, matching, blossoms=[]):
                                                         ]
                                                     else:
                                                         lifted_blossom = list(
-                                                            reversed(based_blossom)
+                                                            reversed(
+                                                                based_blossom)
                                                         )[:-count]
                                                 count += 1
                                             return (
@@ -250,7 +258,8 @@ def find_aug_path(graph, matching, blossoms=[]):
                                     else:
                                         if graph.has_edge(blossom_base, left_stem[-1]):
                                             return (
-                                                left_stem + [blossom_base] + right_stem
+                                                left_stem +
+                                                [blossom_base] + right_stem
                                             )
                                         else:
                                             count = 0
@@ -260,8 +269,9 @@ def find_aug_path(graph, matching, blossoms=[]):
                                                 ):
                                                     if count % 2 == 0:
                                                         lifted_blossom = list(
-                                                            reversed(based_blossom)
-                                                        )[-count - 1 :]
+                                                            reversed(
+                                                                based_blossom)
+                                                        )[-count - 1:]
                                                     else:
                                                         lifted_blossom = based_blossom[
                                                             count:
