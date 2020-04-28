@@ -2,6 +2,7 @@
 This contains the definitions of the find_maximum_matching and find_aug_path functions.
 """
 import copy
+from typing import List
 from graph_utils import (
     Graph,
     Forest,
