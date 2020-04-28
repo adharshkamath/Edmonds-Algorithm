@@ -165,7 +165,7 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
                                 count = 0
                                 blossom_base = None
                                 base_index = -1
-                                extended_blossom = blossom + blossom[1]
+                                extended_blossom = blossom + [blossom[1]]
                                 while blossom_base is None and count < (
                                     len(blossom) - 1
                                 ):

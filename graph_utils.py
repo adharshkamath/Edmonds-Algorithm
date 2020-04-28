@@ -48,8 +48,9 @@ def shortest_distance(graph, source, destination):
 
 
 def contract_nodes(graph, node1, node2):
-    new_node = max(graph.nodes)
+    new_node = node2
     graph.nodes.append(new_node)
+    graph.nodes.remove(node1)
     for edge in graph.edges:
         if edge == [node1, node2] or edge == [node2, node1]:
             graph.edges.remove(edge)
@@ -175,6 +176,6 @@ class Graph:
     def get_edges(self, node):
         edge_list = []
         for edge in self.edges:
-            if node in edge:
+            if node in edge and edge not in edge_list:
                 edge_list.append(edge)
         return edge_list
