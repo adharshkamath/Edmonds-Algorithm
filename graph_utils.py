@@ -8,20 +8,23 @@ def bfs_util(graph, source, destination):
     visited = [False for _ in graph]
     parent = [None for _ in graph]
     distance = [sys.maxsize for _ in graph]
-    visited[source] = True
-    distance[source] = 0
+    index_list = list(graph.keys())
+    visited[index_list.index(source)] = True
+    distance[index_list.index(source)] = 0
     bfs_queue.append(source)
     while bfs_queue != []:
         current = bfs_queue.popleft()
         for neighbour in graph[current]:
-            if neighbour is not None and not visited[neighbour]:
-                visited[neighbour] = True
-                distance[neighbour] = distance[current] + 1
-                parent[neighbour] = current
+            current_idx = index_list.index(current)
+            neighbour_idx = index_list.index(neighbour)
+            if not visited[neighbour_idx]:
+                visited[neighbour_idx] = True
+                distance[neighbour_idx] = distance[current_idx] + 1
+                parent[neighbour_idx] = current
                 bfs_queue.append(neighbour)
                 if neighbour == destination:
-                    return parent, distance[destination]
-    return parent, distance[destination]
+                    return parent, distance[index_list.index(destination)]
+    return parent, distance[index_list.index(destination)]
 
 
 def shortest_path(graph, source, destination):
@@ -102,7 +105,7 @@ class Forest:
 
     def tree(self, tree_index):
         return self.tree_list[tree_index]
-    
+
     def tree_graph(self, tree_index):
         return self.tree_list[tree_index].graph
 
@@ -119,7 +122,7 @@ class Tree:
         self.nodes = []
         self.nodes.append(root)
         self.graph = {}
-        self.graph[root] = None
+        self.graph[root] = []
 
     def add_edge(self, vertex1, vertex2):
         if vertex1 not in self.nodes:
