@@ -14,7 +14,7 @@ def bfs_util(graph, source, destination):
     while bfs_queue != []:
         current = bfs_queue.popleft()
         for neighbour in graph[current]:
-            if not visited[neighbour]:
+            if neighbour is not None and not visited[neighbour]:
                 visited[neighbour] = True
                 distance[neighbour] = distance[current] + 1
                 parent[neighbour] = current
