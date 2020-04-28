@@ -32,7 +32,7 @@ def find_maximum_matching(graph: Graph, matching: List[int]) -> List[int]:
     augmenting_path = find_aug_path(graph, matching)
     if augmenting_path == []:
         return matching
-    for index in enumerate(augmenting_path):
+    for index in range(len(augmenting_path) - 1):
         if index % 2 == 0:
             add_edge_to_matching(
                 matching, augmenting_path[index], augmenting_path[index + 1]
@@ -80,7 +80,7 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
     flag = False
     for i in graph.nodes:
         flag = False
-        for edge in matching:
+        for edge in matching.edges:
             if i in edge:
                 flag = True
         if not flag:
@@ -89,7 +89,7 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
     unmarked_edges = []
     for vertex in graph.nodes:
         for edge in graph.get_edges(vertex):
-            if not edge in matching:
+            if not edge in matching.edges:
                 unmarked_edges.append(edge)
     for vertex in forest_nodes:
         v_tree_index = forest.get_tree_by_node(vertex)
@@ -97,18 +97,21 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
         for edge in v_edges:
             reverse_edge = [edge[1], edge[0]]
             if edge in unmarked_edges or reverse_edge in unmarked_edges:
-                neighbour = edge[1]
+                if vertex == edge[0]:
+                    neighbour = edge[1]
+                else:
+                    neighbour = edge[0]
                 neighbour_in_forest = forest.is_in_forest(neighbour)
                 if not neighbour_in_forest:
-                    forest.tree(v_tree_index).add_edge(edge)
+                    forest.tree(v_tree_index).add_edge(edge[0], edge[1])
                     neighbour_matching = matching.get_edges(neighbour)
-                    forest.tree(v_tree_index).add_edge(neighbour_matching)
+                    forest.tree(v_tree_index).add_edge(neighbour_matching[0], neighbour_matching[1])
                     forest_nodes.append(neighbour_matching[1])
                 else:
                     n_tree_index = forest.get_tree_by_node(neighbour)
                     if (
                         shortest_distance(
-                            forest.tree_graph(v_tree_index),
+                            forest.tree_graph(n_tree_index),
                             neighbour,
                             forest.get_root(neighbour),
                         )

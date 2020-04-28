@@ -12,7 +12,7 @@ def bfs_util(graph, source, destination):
     visited[index_list.index(source)] = True
     distance[index_list.index(source)] = 0
     bfs_queue.append(source)
-    while bfs_queue != []:
+    while len(bfs_queue) != 0:
         current = bfs_queue.popleft()
         for neighbour in graph[current]:
             current_idx = index_list.index(current)
