@@ -12,6 +12,7 @@ from graph_utils import (
     shortest_path,
     shortest_distance,
     contract_nodes,
+    aux_add_edge_to_matching
 )
 
 
@@ -89,7 +90,7 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
     unmarked_edges = []
     for vertex in graph.nodes:
         for edge in graph.get_edges(vertex):
-            if not edge in matching.edges:
+            if not edge in matching.edges and edge not in unmarked_edges:
                 unmarked_edges.append(edge)
     for vertex in forest_nodes:
         v_tree_index = forest.get_tree_by_node(vertex)
@@ -106,7 +107,8 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
                     forest.tree(v_tree_index).add_edge(edge[0], edge[1])
                     neighbour_matching = matching.get_edges(neighbour)
                     forest.tree(v_tree_index).add_edge(neighbour_matching[0], neighbour_matching[1])
-                    forest_nodes.append(neighbour_matching[1])
+                    neighbour_neighbour = neighbour_matching[0] if neighbour_matching[0] != neighbour else neighbour_matching[1]
+                    forest_nodes.append(neighbour_neighbour)
                 else:
                     n_tree_index = forest.get_tree_by_node(neighbour)
                     if (
@@ -150,6 +152,13 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
                                             remove_edge[0],
                                             remove_edge[1],
                                         )
+                                        if not (remove_edge[0] in blossom and remove_edge[1] in blossom):
+                                            outside_blossom = remove_edge[0] if remove_edge[0] != blossom[index] else remove_edge[1]
+                                            aux_add_edge_to_matching(
+                                                contracted_matching,
+                                                neighbour,
+                                                outside_blossom
+                                            )
                             blossoms.append(neighbour)
                             aug_path = find_aug_path(
                                 contracted_graph, contracted_matching, blossoms
