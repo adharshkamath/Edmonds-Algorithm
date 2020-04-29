@@ -78,8 +78,12 @@ def add_edge_to_matching(matching, vertex1, vertex2):
         matching.nodes.append(vertex2)
         
         
-def aux_add_edge_to_matching(matching, vertex1, vertex2):       # does not preserve the matching.
-    if (                                                        # to be used only to temporarily change the nature of the matching while contracting the matching
+def aux_add_edge_to_matching(matching, vertex1, vertex2):
+    """
+    This function does not ensure that the resulting matching is valid.
+    It is used only during contracting the matchings.
+    """
+    if (
         [vertex1, vertex2] in matching.edges
         or [vertex2, vertex1] in matching.edges
     ):
