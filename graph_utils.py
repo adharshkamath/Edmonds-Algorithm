@@ -100,8 +100,10 @@ def remove_edge_from_matching(matching, vertex1, vertex2):
         matching.edges.remove([vertex1, vertex2])
     if [vertex2, vertex1] in matching.edges:
         matching.edges.remove([vertex2, vertex1])
-    matching.nodes.remove(vertex1)
-    matching.nodes.remove(vertex2)
+    if vertex1 in matching.nodes:
+        matching.nodes.remove(vertex1)
+    if vertex2 in matching.nodes:
+        matching.nodes.remove(vertex2)
 
 
 class Forest:
