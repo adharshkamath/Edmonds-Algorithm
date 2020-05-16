@@ -57,9 +57,9 @@ def contract_nodes(graph, node1, node2):
         if node1 == edge[1]:
             edge[1] = new_node
     _set = set(tuple(edge) for edge in new_graph.edges)
-    new_graph.edges = [ list(edge) for edge in _set ]
+    new_graph.edges = [list(edge) for edge in _set]
     if [node2, node2] in new_graph.edges:
-        new_graph.edges.remove([node2, node2]) 
+        new_graph.edges.remove([node2, node2])
     return new_graph
 
 
@@ -76,8 +76,8 @@ def add_edge_to_matching(matching, vertex1, vertex2):
         matching.nodes.append(vertex1)
     if vertex2 not in matching.nodes:
         matching.nodes.append(vertex2)
-        
-        
+
+
 def aux_add_edge_to_matching(matching, vertex1, vertex2):
     """
     This function does not ensure that the resulting matching is valid.
@@ -160,24 +160,6 @@ class Tree:
             self.graph[vertex1].append(vertex2)
 
 
-class Matching:
-    def __init__(self):
-        self.edges = []
-        self.nodes = []
-
-    def get_edges(self, node):
-        for edge in self.edges:
-            if node in edge:
-                return edge
-        return []
-
-    def has_edge(self, node1, node2):
-        for _edge in self.edges:
-            if [node1, node2] == _edge or [node2, node1] == _edge:
-                return True
-        return False
-
-
 class Graph:
     def __init__(self):
         self.edges = []
@@ -195,3 +177,12 @@ class Graph:
             if node in edge and edge not in edge_list and [edge[1], edge[0]] not in edge_list:
                 edge_list.append(edge)
         return edge_list
+
+
+class Matching(Graph):
+
+    def get_edges(self, node):
+        for edge in self.edges:
+            if node in edge:
+                return edge
+        return []
