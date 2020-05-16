@@ -16,11 +16,11 @@ from graph_utils import (
 )
 
 
-def find_maximum_matching(graph: Graph, matching: List[int]) -> List[int]:
+def find_maximum_matching(graph: Graph, matching: Matching) -> List[int]:
     """
     Input:
         graph: An instance of the Graph class defined in graph_utils.py
-        matching: A list of edges present in the matching
+        matching: An instance of the Matching class defined in graph_utils.py
     Description:
         This is a recursive function that calls find_aug_path(), that returns an augmenting path.
         The edges in the augmenting path are added to and removed from the matching alternatingly.
@@ -49,7 +49,7 @@ def find_aug_path(graph: Graph, matching: List[int], blossoms: List[List[int]] =
     """
     Input:
         graph: An instance of the Graph class defined in graph_utils.py
-        matching: A list of edges present in the matching
+        matching: An instance of the Matching class defined in graph_utils.py
         blossoms: A list of blossoms from previous calls to find_aug_path
     Description:
         This function finds augmenting paths, given a graph and a matching in the graph.
