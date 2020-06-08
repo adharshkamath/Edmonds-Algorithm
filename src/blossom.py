@@ -7,6 +7,7 @@ from graph_utils import (
     Graph,
     Forest,
     Tree,
+    Matching,
     add_edge_to_matching,
     remove_edge_from_matching,
     shortest_path,
