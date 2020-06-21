@@ -83,10 +83,7 @@ def aux_add_edge_to_matching(matching, vertex1, vertex2):
     This function does not ensure that the resulting matching is valid.
     It is used only during contracting the matchings.
     """
-    if (
-        [vertex1, vertex2] in matching.edges
-        or [vertex2, vertex1] in matching.edges
-    ):
+    if [vertex1, vertex2] in matching.edges or [vertex2, vertex1] in matching.edges:
         return matching
     matching.edges.append([vertex1, vertex2])
     if vertex1 not in matching.nodes:
@@ -174,13 +171,16 @@ class Graph:
     def get_edges(self, node):
         edge_list = []
         for edge in self.edges:
-            if node in edge and edge not in edge_list and [edge[1], edge[0]] not in edge_list:
+            if (
+                node in edge
+                and edge not in edge_list
+                and [edge[1], edge[0]] not in edge_list
+            ):
                 edge_list.append(edge)
         return edge_list
 
 
 class Matching(Graph):
-
     def get_edges(self, node):
         for edge in self.edges:
             if node in edge:
