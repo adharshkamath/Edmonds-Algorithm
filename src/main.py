@@ -1,5 +1,5 @@
 from blossom import find_maximum_matching
-from Demo import giveinput,show_demo
+from demo import giveinput,show_demo
 
 
 def run():
@@ -25,11 +25,6 @@ def run():
             print("wrong input try again!!")
         else:
             giveinput(num_node,num_edge)
-
-
-        
-
-
-        
+            
 run()
 
